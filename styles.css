@@ -1,0 +1,92 @@
+
+	/* This file is part of Moodle - http://moodle.org/
+	//
+	// Moodle is free software: you can redistribute it and/or modify
+	// it under the terms of the GNU General Public License as published by
+	// the Free Software Foundation, either version 3 of the License, or
+	// (at your option) any later version.
+	//
+	// Moodle is distributed in the hope that it will be useful,
+	// but WITHOUT ANY WARRANTY; without even the implied warranty of
+	// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	// GNU General Public License for more details.
+	//
+	// You should have received a copy of the GNU General Public License
+	// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+	
+	 * block_mysites
+	 *
+	 * @author      Fred Woolard <woolardfa@appstate.edu>
+	 * @copyright   (c) 2018 Appalachian State Universtiy, Boone, NC
+	 * @license     GNU General Public License version 3
+	 * @package     block_mysites
+	 */
+
+.block_mysites .footer {
+    margin-top: 0;
+    text-align: right;
+}
+
+.block_mysites .card-text.content .background.loading {
+    background-image: url('[[pix:i/loading]]');
+    background-position: 50%;
+    background-repeat: no-repeat;
+}
+
+.block_mysites .card .card-block {
+    padding: 1.25rem 1.25rem .5rem 1.25rem;
+    overflow-x: hidden;
+}
+
+.block_mysites .card .card-block .media-body .media-object {
+    height: 3.25rem;
+    overflow-y: hidden;
+}
+
+.block_mysites .card .card-block .status-wrapper {
+    height: 3.5rem;
+}
+
+.block_mysites .card .card-block .status-wrapper .status-container {
+    height: inherit;
+    overflow-y: hidden;
+}
+
+.block_mysites .card .card-block .status-wrapper .status-container.running {
+    background-image: url('[[pix:i/loading_small]]');
+    background-position: 45%;
+    background-repeat: no-repeat;
+}
+
+.block_mysites .card .card-block .media .media-object .text-muted {
+    margin-bottom: 1rem;
+    margin-top: 0;
+}
+
+
+.block_mysites .card .card-block .status-wrapper .status-container .status-left {
+	width: 45%;
+    margin-right: .25rem;
+}
+
+
+.block_mysites .card .card-block .status-wrapper .status-container .status-right {
+    float: right;
+    width: 45%;
+    margin-left: .25rem;
+}
+
+.block_mysites .card .card-block .status-wrapper .status-container .status-right p.status {
+    margin: 0;
+}
+
+.block_mysites .card .card-block .status-wrapper .status-container .status-right progress {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.block_mysites .card .card-block .status-wrapper .status-container .status-right .btn-sm {
+    float: right;
+    position: relative;
+    top: -.5rem;
+}

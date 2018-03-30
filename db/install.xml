@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/mysites/db" VERSION="2018052000" COMMENT="XMLDB file for Moodle mysites block" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+  <TABLES>
+    <TABLE NAME="block_mysites" COMMENT="Cached external site courselists.">
+      <FIELDS>
+        <FIELD NAME="id"          TYPE="int"  LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid"      TYPE="int"  LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int"  LENGTH="10" NOTNULL="true" SEQUENCE="false" DEFAULT="0" />
+        <FIELD NAME="data"        TYPE="text"             NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="xak1" UNIQUE="true" FIELDS="userid" COMMENT="Moodle user id"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_mysites_queue" COMMENT="External site courselists.">
+      <FIELDS>
+        <FIELD NAME="id"            TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="true"  />
+        <FIELD NAME="siteid"        TYPE="char"  LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
+        <FIELD NAME="username"      TYPE="char"  LENGTH="100" NOTNULL="true"  SEQUENCE="false" />
+        <FIELD NAME="courseid"      TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
+        <FIELD NAME="userid"        TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
+        <FIELD NAME="timecreated"   TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
+        <FIELD NAME="timemodified"  TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
+        <FIELD NAME="returnsiteid"  TYPE="char"  LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
+        <FIELD NAME="status"        TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
+        <FIELD NAME="pathnamehash"  TYPE="char"  LENGTH="40"  NOTNULL="false" SEQUENCE="false"  DEFAULT=""  />
+        <FIELD NAME="returnitemid"  TYPE="int"   LENGTH="10"  NOTNULL="false" SEQUENCE="false"  DEFAULT="0" />
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="xak1" UNIQUE="true" FIELDS="siteid,username,courseid" COMMENT="Requesting siteid + username + courseid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_mysites_import" COMMENT="Backup files uploaded by external sites.">
+      <FIELDS>
+        <FIELD NAME="id"            TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="true"  />
+        <FIELD NAME="userid"        TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
+        <FIELD NAME="siteid"        TYPE="char"  LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
+        <FIELD NAME="sitecourseid"  TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
+        <FIELD NAME="filename"      TYPE="char"  LENGTH="255" NOTNULL="true"  SEQUENCE="false" />
+        <FIELD NAME="timecreated"   TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="xak1" UNIQUE="false" FIELDS="userid,siteid" COMMENT="User id, extern site id"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
