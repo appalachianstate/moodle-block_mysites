@@ -47,7 +47,7 @@
     $string['connection_lbl']               = 'Web service connection';
     $string['connection_desc']              = 'Values used to connect to the MySites API web service.';
     $string['sites_lbl']                    = 'Sites List';
-    $string['sites_desc']                   = 'List of sites from which to display user course enrollment information. Comma separated, optionally quoted fields: siteid, tab label, apikey, url, upload limit (e.g. 200M, optional), send requests (Y/N, optional), accept requests (Y/N, optional)';
+    $string['sites_desc']                   = 'List of sites from which to display user course enrollment information. Comma separated, optionally quoted fields: siteid, tab label, apikey, url, upload limit (e.g. 200M, optional), send requests to site (Y/N, optional), accept requests from site (Y/N, optional)';
     $string['display_lbl']                  = 'Display';
     $string['display_desc']                 = 'Display configuration values';
     $string['showbackups_lbl']              = 'Display backups';
