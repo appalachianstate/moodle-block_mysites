@@ -55,7 +55,7 @@
             "{$pluginname}/{$field}",
             get_string("{$field}_lbl",  $pluginname),
             get_string("{$field}_desc", $pluginname),
-            '', PARAM_ALPHANUM, 10, 10);
+            '', PARAM_ALPHANUMEXT, 20, 20);
         $settings->add($adminSetting);
         unset($adminSetting);
 
