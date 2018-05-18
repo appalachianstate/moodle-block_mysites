@@ -523,7 +523,8 @@
                     self::STATUS_REQUEST_FAILED;
                 }
             }
-            catch(Exception $ex) {
+            catch(Exception $exc) {
+                error_log($exc->getMessage() . ':' . $exc->getTraceAsString());
                 return self::STATUS_REQUEST_FAILED;
             }
 

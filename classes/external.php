@@ -171,10 +171,10 @@
         {
 
             return new external_function_parameters(array(
-                'action'   => new external_value(PARAM_ALPHA,    'Type of action',   VALUE_REQUIRED, '', false),
-                'siteid'   => new external_value(PARAM_ALPHANUM, 'Type of action',   VALUE_REQUIRED, '', false),
-                'username' => new external_value(PARAM_USERNAME, 'Moodle username',  VALUE_REQUIRED, '', false),
-                'courseid' => new external_value(PARAM_INT,      'Moodle course id', VALUE_REQUIRED, 0,  false)
+                'action'   => new external_value(PARAM_ALPHA,       'Type of action',     VALUE_REQUIRED, '', false),
+                'siteid'   => new external_value(PARAM_ALPHANUMEXT, 'Requesting site id', VALUE_REQUIRED, '', false),
+                'username' => new external_value(PARAM_USERNAME,    'Moodle username',    VALUE_REQUIRED, '', false),
+                'courseid' => new external_value(PARAM_INT,         'Moodle course id',   VALUE_REQUIRED,  0, false)
             ));
 
         }
@@ -224,6 +224,7 @@
                         $response = lib::STATUS_REQUEST_FAILED;
                 }
             } catch (Exception $exc) {
+                error_log($exc->getMessage());
                 $response = lib::STATUS_REQUEST_FAILED;
             }
 
@@ -241,10 +242,10 @@
         {
 
             return new external_function_parameters(array(
-                'siteid'   => new external_value(PARAM_ALPHANUM, 'Type of action',   VALUE_REQUIRED, '', false),
-                'username' => new external_value(PARAM_USERNAME, 'Moodle username',  VALUE_REQUIRED, '', false),
-                'courseid' => new external_value(PARAM_INT,      'Moodle course id', VALUE_REQUIRED, 0,  false),
-                'itemid'   => new external_value(PARAM_INT,      'Draft item id',    VALUE_REQUIRED, '', false)
+                'siteid'   => new external_value(PARAM_ALPHANUMEXT, 'Sender site id',   VALUE_REQUIRED, '', false),
+                'username' => new external_value(PARAM_USERNAME,    'Moodle username',  VALUE_REQUIRED, '', false),
+                'courseid' => new external_value(PARAM_INT,         'Moodle course id', VALUE_REQUIRED,  0, false),
+                'itemid'   => new external_value(PARAM_INT,         'Draft item id',    VALUE_REQUIRED, '', false)
             ));
 
         }
@@ -274,7 +275,17 @@
          */
         public static function finish_upload($siteid, $username, $courseid, $itemid)
         {
-            return lib::finish_upload($siteid, $username, $courseid, $itemid);
+
+            try {
+                $response = lib::finish_upload($siteid, $username, $courseid, $itemid);
+            }
+            catch (Exception $exc) {
+                error_log($exc->getMessage());
+                $response = lib::STATUS_REQUEST_FAILED;
+            }
+
+            return $response;
+
         }
 
 
@@ -342,8 +353,9 @@
                 return $blockcontent->text;
 
             }
-            catch (Exception $e) {
-                return $OUTPUT->notification($e->getMessage(), notification::NOTIFY_ERROR);
+            catch (Exception $exc) {
+                error_log($exc->getMessage());
+                return $OUTPUT->notification($exc->getMessage(), notification::NOTIFY_ERROR);
             }
 
         }
@@ -404,8 +416,9 @@
                 return $PAGE->get_renderer('block_mysites')->render_course_select($courses, context_user::instance($USER->id)->id);
 
             }
-            catch (Exception $e) {
-                return $OUTPUT->notification($e->getMessage(), notification::NOTIFY_ERROR);
+            catch (Exception $exc) {
+                error_log($exc->getMessage());
+                return $OUTPUT->notification($exc->getMessage(), notification::NOTIFY_ERROR);
             }
 
         }
@@ -420,10 +433,10 @@
         {
             return new external_function_parameters(
                 array(
-                    'blockinstanceid'   => new external_value(PARAM_INT, "Request type", NULL_NOT_ALLOWED),
-                    'action'            => new external_value(PARAM_ALPHA, "Request type", NULL_NOT_ALLOWED),
-                    'siteid'            => new external_value(PARAM_ALPHANUM, "Site id", NULL_NOT_ALLOWED),
-                    'courseid'          => new external_value(PARAM_INT, "Course id", NULL_NOT_ALLOWED)
+                    'blockinstanceid'   => new external_value(PARAM_INT,         "Request type", NULL_NOT_ALLOWED),
+                    'action'            => new external_value(PARAM_ALPHA,       "Request type", NULL_NOT_ALLOWED),
+                    'siteid'            => new external_value(PARAM_ALPHANUMEXT, "Site id",      NULL_NOT_ALLOWED),
+                    'courseid'          => new external_value(PARAM_INT,         "Course id",    NULL_NOT_ALLOWED)
                 )
             );
         }
@@ -484,8 +497,9 @@
                 return $PAGE->get_renderer('block_mysites')->render_course_status_div($status, $siteid, $courseid);
 
             }
-            catch (Exception $e) {
-                return $OUTPUT->notification($e->getMessage(), notification::NOTIFY_ERROR);
+            catch (Exception $exc) {
+                error_log($exc->getMessage());
+                return $OUTPUT->notification($exc->getMessage(), notification::NOTIFY_ERROR);
             }
 
         }

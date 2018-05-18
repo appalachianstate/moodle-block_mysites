@@ -18,13 +18,12 @@
     <TABLE NAME="block_mysites_queue" COMMENT="External site courselists.">
       <FIELDS>
         <FIELD NAME="id"            TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="true"  />
-        <FIELD NAME="siteid"        TYPE="char"  LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
+        <FIELD NAME="siteid"        TYPE="char"  LENGTH="20"  NOTNULL="true"  SEQUENCE="false" />
         <FIELD NAME="username"      TYPE="char"  LENGTH="100" NOTNULL="true"  SEQUENCE="false" />
         <FIELD NAME="courseid"      TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
         <FIELD NAME="userid"        TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
         <FIELD NAME="timecreated"   TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
         <FIELD NAME="timemodified"  TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
-        <FIELD NAME="returnsiteid"  TYPE="char"  LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
         <FIELD NAME="status"        TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
         <FIELD NAME="pathnamehash"  TYPE="char"  LENGTH="40"  NOTNULL="false" SEQUENCE="false"  DEFAULT=""  />
         <FIELD NAME="returnitemid"  TYPE="int"   LENGTH="10"  NOTNULL="false" SEQUENCE="false"  DEFAULT="0" />
@@ -40,7 +39,7 @@
       <FIELDS>
         <FIELD NAME="id"            TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="true"  />
         <FIELD NAME="userid"        TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
-        <FIELD NAME="siteid"        TYPE="char"  LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
+        <FIELD NAME="siteid"        TYPE="char"  LENGTH="20"  NOTNULL="true"  SEQUENCE="false" />
         <FIELD NAME="sitecourseid"  TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
         <FIELD NAME="filename"      TYPE="char"  LENGTH="255" NOTNULL="true"  SEQUENCE="false" />
         <FIELD NAME="timecreated"   TYPE="int"   LENGTH="10"  NOTNULL="true"  SEQUENCE="false" />
