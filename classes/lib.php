@@ -26,7 +26,9 @@
 
     namespace block_mysites;
     use \backup;
+    use \backup_check;
     use \backup_controller;
+    use \backup_plan_dbops;
     use \context_user;
     use \Exception;
     use \stdClass;
@@ -730,33 +732,63 @@
                 backup::TYPE_1COURSE, $queuerec->courseid, backup::FORMAT_MOODLE,
                 backup::INTERACTIVE_NO, backup::MODE_GENERAL, $queuerec->userid
             );
-            $filename = \backup_plan_dbops::get_default_backup_filename(
-                backup::FORMAT_MOODLE, backup::TYPE_1COURSE, $queuerec->courseid, false, false);
-
-            // User might not have capability to change users/logs
-            // settings, so trap those exceptions
-            $filename = "{$config->thissiteid}-{$filename}";
             $plan = $controller->get_plan();
-            try {
-                $plan->get_setting('filename')->set_value($filename);
-                $plan->get_setting('users')->set_value(false);
-                $plan->get_setting('logs')->set_value(false);
-            }
-            catch(Exception $ex) {}
 
-            // Save the state of the controller
-            $controller->save_controller();
-            // Reload it to get log files open
-            $controller = \backup_controller::load_controller($controller->get_backupid());
+            // If users set to be included, attempt to exclude,
+            // and bail if unable to do so. User may not have
+            // capability to change users settings.
+            $user_setting = $plan->get_setting('users');
+            if ($user_setting->get_value()) {
+                try {
+                    $user_setting->set_value(false);
+                } catch(\Exception $exc) {
+                    mtrace("Error: {$queuerec->siteid}/{$queuerec->username}/{$queuerec->courseid}: {$exc->getMessage()}");
+                    self::set_job_status($queuerec->id, self::STATUS_BACKUP_FAILED);
+                    $controller->destroy();
+                    return;
+                }
+            }
+
+            // Do likewise with logs.
+            $logs_setting = $plan->get_setting('logs');
+            if ($logs_setting->get_value()) {
+                try {
+                    $logs_setting->set_value(false);
+                } catch(\Exception $exc) {
+                    mtrace("Error: {$queuerec->siteid}/{$queuerec->username}/{$queuerec->courseid}: {$exc->getMessage()}");
+                    self::set_job_status($queuerec->id, self::STATUS_BACKUP_FAILED);
+                    $controller->destroy();
+                    return;
+                }
+            }
+
+            // Adjust the output filename.
+            $name_setting = $plan->get_setting('filename');
+            try {
+                $name_setting->set_value(backup_plan_dbops::get_default_backup_filename(
+                    backup::FORMAT_MOODLE, backup::TYPE_1COURSE, $queuerec->courseid, false, false));
+            } catch(\Exception $exc) {
+                // Output filename did not validate, likely too
+                // long (max is 90 chars).
+                mtrace("Error: {$queuerec->siteid}/{$queuerec->username}/{$queuerec->courseid}: {$exc->getMessage()}");
+                self::set_job_status($queuerec->id, self::STATUS_BACKUP_FAILED);
+                $controller->destroy();
+                return;
+            }
+
+            // This will also save and reload the controller.
+            $controller->set_status(backup::STATUS_AWAITING);
 
             self::set_job_status($queuerec->id, self::STATUS_BACKUP_INPROGRESS);
             try {
+                // Re-check capabilities for user
+                backup_check::check_security($controller, false);
                 // Build the compressed backup file, and put in user's
                 // private backup files area
                 $controller->execute_plan();
                 $results = $controller->get_results();
                 if(empty($results) || empty($results['backup_destination'])) {
-                    $status = self::STATUS_BACKUP_FAILED;
+                    $queuerec->status = self::STATUS_BACKUP_FAILED;
                 } else {
                     // Should get a Moodle stored_file
                     $sf = $results['backup_destination'];
@@ -771,10 +803,10 @@
                 }
                 // Update the rec's status and pathnamehash
                 $DB->update_record('block_mysites_queue', $queuerec);
-                mtrace("Backup: {$queuerec->siteid}/{$queuerec->username}/{$queuerec->courseid}: {$filename}");
+                mtrace("Backup: {$queuerec->siteid}/{$queuerec->username}/{$queuerec->courseid}: {$sf->get_filename()}, {$sf->get_contenthash()}");
             }
-            catch(Exception $ex) {
-                mtrace("Error: {$queuerec->siteid}/{$queuerec->username}/{$queuerec->courseid}: {$ex->getMessage()}");
+            catch(Exception $exc) {
+                mtrace("Error: {$queuerec->siteid}/{$queuerec->username}/{$queuerec->courseid}: {$exc->getMessage()}");
                 self::set_job_status($queuerec->id, self::STATUS_BACKUP_FAILED);
             }
             finally {

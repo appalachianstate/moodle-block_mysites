@@ -84,8 +84,8 @@
                 'filename'      => new external_value(PARAM_TEXT,       'File name'),
                 'filesize'      => new external_value(PARAM_INT,        'File size'),
                 'timecreated'   => new external_value(PARAM_INT,        'File create date'),
-                'pathnamehash'  => new external_value(PARAM_ALPHANUM,   'Course Ref. Number'),
-                'contenthash'   => new external_value(PARAM_ALPHANUM,   'Course Shortname'),
+                'pathnamehash'  => new external_value(PARAM_ALPHANUM,   'Hash of Moodle repo file-path'),
+                'contenthash'   => new external_value(PARAM_ALPHANUM,   'Hash of file content'),
                 'downloadurl'   => new external_value(PARAM_URL,        'Download URL')
             ));
 
