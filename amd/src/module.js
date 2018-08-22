@@ -44,8 +44,14 @@ define(
                 link.attr('href', '#');
             });
 
-            // Fix up the button toggle for site tab navs
-            // module.initsites(blockinstanceid);
+            // If initial page load, data fetch was deferred
+            // so go get it now.
+            var contentdiv = $('#inst' + blockinstanceid + '-content');
+            if (contentdiv.data('refresh') == '1') {
+                contentdiv.data('refresh', '0');
+                module.refresh(blockinstanceid);
+                return;
+            }
 
             // Fix up the button toggle for courses or backup files
             module.initcorb(blockinstanceid);

@@ -139,7 +139,12 @@
         private function render_content_text(renderable $widget)
         {
 
-            return \html_writer::start_div('', array('id' => "inst{$widget->blockinstanceid}-content"))
+            $attribs = array('id' => "inst{$widget->blockinstanceid}-content");
+            if ($widget->deferload) {
+                $attribs['data-refresh'] = '1';
+            }
+
+            return \html_writer::start_div('', $attribs)
                  . $this->render_site_tabs($widget)
                  . $this->render_site_panels($widget)
                  . \html_writer::end_div(); // id

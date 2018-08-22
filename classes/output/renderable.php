@@ -78,6 +78,11 @@
          */
         public $tablabels = array();
 
+        /**
+         * @var bool Indicates deferred load so we don't wait on ws calls during page load
+         */
+        public $deferload = false;
+
 
         /**
          * Constructor
@@ -97,7 +102,7 @@
             $this->pageindex = $pageindex;
 
             // Fetch the payload
-            list($this->tablabels, $this->courselists, $this->backuplists, $this->errormsg)
+            list($this->tablabels, $this->courselists, $this->backuplists, $this->deferload, $this->errormsg)
                 = lib::get_lists($USER, $refresh);
 
         }

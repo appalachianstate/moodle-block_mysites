@@ -226,16 +226,27 @@
 
             // If plugin not configured, nothing to fetch.
             if (!self::plugin_configured()) {
-                return array(array(), array(), array(), get_string('nositeconfig', 'block_mysites'));
+                return array(array(), array(), array(), false, get_string('nositeconfig', 'block_mysites'));
             }
 
-            // See what's in the DB.
-            $cachedrec = $DB->get_record('block_mysites', array('userid' => $user->id));
-            if ($cachedrec && !$refresh) {
-                $blob = (array)unserialize(base64_decode($cachedrec->data));
-                return array($blob['tablabels'], $blob['courselists'], $blob['backuplists'], '');
+
+            if (!$refresh) {
+
+                // See what's in the DB.
+                $cachedrec = $DB->get_record('block_mysites', array('userid' => $user->id));
+                if ($cachedrec) {
+                    $blob = (array)unserialize(base64_decode($cachedrec->data));
+                    return array($blob['tablabels'], $blob['courselists'], $blob['backuplists'], false, '');
+                }
+
+                // Nothing in the cache, and not refreshing so
+                // assume it is a page load, defer to ajax call
+                return array(array(), array(), array(), true, '');
+
             }
 
+            // Refresh, either deferred from page load or user
+            // initiated, so replacing whatever is in cache
             $tablabels = array(); $courselists = array(); $backuplists = array();
 
             // Get the courses in which user has enrollments for
@@ -246,7 +257,7 @@
                 try {
                     $lists = self::get_lists_for_site($site, $user->username);
                 } catch (Exception $ex) {
-                    return array(array(), array(), array(), get_string('wscallerror', 'block_mysites', $siteid));
+                    return array(array(), array(), array(), false, get_string('wscallerror', 'block_mysites', $siteid));
                 }
                 $courselists[$siteid] = $lists['courses'];
                 $backuplists[$siteid] = $lists['backups'];
@@ -307,21 +318,16 @@
                 $backuplists[$siteid] = array_values($backuplists[$siteid]);
             }
 
-            // Insert or update the cache (mdl_block_mysites)
-            if ($cachedrec == false) {
-                $cachedrec = new \stdClass();
-                $cachedrec->userid = $user->id;
-            }
+            // Do blind delete for any old cache entry
+            $DB->delete_records('block_mysites', array('userid' => $user->id));
+            // Insert new entry
+            $cachedrec = new \stdClass();
+            $cachedrec->userid = $user->id;
             $cachedrec->timecreated = time();
             $cachedrec->data = base64_encode(serialize(array('tablabels' => $tablabels, 'courselists' => $courselists, 'backuplists' => $backuplists)));
+            $DB->insert_record('block_mysites', $cachedrec, false);
 
-            if (empty($cachedrec->id)) {
-                $DB->insert_record('block_mysites', $cachedrec, false);
-            } else {
-                $DB->update_record('block_mysites', $cachedrec);
-            }
-
-            return array($tablabels, $courselists, $backuplists, '');
+            return array($tablabels, $courselists, $backuplists, false, '');
 
         }
 
