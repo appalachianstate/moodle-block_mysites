@@ -402,12 +402,6 @@
                 foreach ($single->KEY as $key) {
                     $item->{$key->attributes()->name} = $key->VALUE->__toString();
                 }
-                // Remove any port component for now. Proper fix will
-                // be for site config to have separate web service and
-                // site urls.
-                $urlparts = parse_url(rtrim($site->url, '/'));
-                $urlpath =  empty($urlparts['path']) ? '' : $urlparts['path'];
-                $item->url = "{$urlparts['scheme']}://{$urlparts['host']}{$urlpath}/course/view.php?id={$item->id}";
                 $lists['courses'][$item->id] = $item;
                 unset($item);
             }

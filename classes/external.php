@@ -77,7 +77,8 @@
                 'crn'           => new external_value(PARAM_TEXT,       'Course Ref. Number'),
                 'shortname'     => new external_value(PARAM_TEXT,       'Course Shortname'),
                 'backupcap'     => new external_value(PARAM_BOOL,       'Backup Capability'),
-                'status'        => new external_value(PARAM_INT,        'Export Job Status')
+                'status'        => new external_value(PARAM_INT,        'Export Job Status'),
+                'url'           => new external_value(PARAM_URL,        'Course URL')
             ));
 
             $backuplistitem = new external_single_structure(array(
@@ -137,7 +138,8 @@
                         'crn'       => $courserec->idnumber,
                         'shortname' => $courserec->shortname,
                         'backupcap' => has_capability('moodle/backup:backupcourse', \context_course::instance($courserec->id), $user->id, false),
-                        'status'    => empty($queuerecs[$courserec->id]) ? 0 : $queuerecs[$courserec->id]->status
+                        'status'    => empty($queuerecs[$courserec->id]) ? 0 : $queuerecs[$courserec->id]->status,
+                        'url'       => "{$CFG->wwwroot}/course/view.php?id={$courserec->id}"
                     );
                 }
             }
