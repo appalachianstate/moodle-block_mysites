@@ -818,6 +818,12 @@
                 $controller->destroy();
             }
 
+            // If no problem so far attempt to return file
+            // to the requester
+            if ($queuerec->status == self::STATUS_TRANSFER_PENDING) {
+                self::upload_course_backup($queuerec);
+            }
+
         }
 
 
@@ -933,15 +939,11 @@
                 }
 
                 $itemid = $response[0]['itemid'];
-
                 $queuerec->returnitemid = $itemid;
                 $queuerec->status = self::STATUS_TRANSFER_COMPLETED;
+
                 $DB->update_record('block_mysites_queue', $queuerec);
-
                 mtrace("Upload: {$queuerec->siteid}/{$queuerec->username}/{$queuerec->courseid}: itemid {$itemid}.");
-
-                self::send_finish_upload($queuerec);
-
             }
             catch(Exception $ex) {
                 mtrace("Error: {$queuerec->siteid}/{$queuerec->username}/{$queuerec->courseid}: {$ex->getMessage()}.");
@@ -949,6 +951,12 @@
             }
             finally {
                 if ($ch) { curl_close($ch); }
+            }
+
+            // If no problem so far signal the requester the file
+            // is in a draft area
+            if ($queuerec->status == self::STATUS_TRANSFER_COMPLETED) {
+                self::send_finish_upload($queuerec);
             }
 
         }
@@ -976,8 +984,8 @@
             }
 
             // File is in draft area on return site, need to call
-            // the mysites web service and provide the itemid to
-            // finalize the transfer
+            // the mysites web service and provide the (draft area)
+            // itemid to finalize the transfer
             $wsurl = trim(rtrim($returnsite->url, '/')) . "/webservice/rest/server.php";
             $ws = new \webservice_rest_client($wsurl, $returnsite->token);
 
