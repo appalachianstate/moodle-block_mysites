@@ -287,9 +287,9 @@
                     // Small
                     $pagecontent .= \html_writer::start_div('hidden-sm-up');
 
-                    // Shortname
+                    // Shortname (link)
                     $pagecontent .= \html_writer::start_tag('h4', array('class' => 'h5'));
-                    $pagecontent .= \html_writer::link($courselist[$i]->url, htmlspecialchars($courselist[$i]->shortname));
+                    $pagecontent .= \html_writer::link($courselist[$i]->url, htmlspecialchars($courselist[$i]->shortname), ($courselist[$i]->visible) ? null : array('class' => 'dimmed'));
                     $pagecontent .= \html_writer::end_tag('h4');
 
                     $pagecontent .= \html_writer::end_div(); // hidden-sm-up
@@ -305,14 +305,12 @@
                     $pagecontent .= $this->output->render(new \pix_icon('/i/course', get_string('course')));
                     $pagecontent .= \html_writer::end_div(); // media-left
 
-                    // Shortname
                     $pagecontent .= \html_writer::start_div('media-body');
-
                     $pagecontent .= \html_writer::start_div('media-object m-b-1');
 
-                    // Name (link)
+                    // Shortname (link)
                     $pagecontent .= \html_writer::start_tag('h4', array('class' => 'h5'));
-                    $pagecontent .= \html_writer::link($courselist[$i]->url, htmlspecialchars($courselist[$i]->shortname));
+                    $pagecontent .= \html_writer::link($courselist[$i]->url, htmlspecialchars($courselist[$i]->shortname), ($courselist[$i]->visible) ? null : array('class' => 'dimmed'));
                     $pagecontent .= \html_writer::end_tag('h4');
 
                     // CRN
@@ -320,9 +318,7 @@
                     $pagecontent .= empty($courselist[$i]->crn) ? '&nbsp' : htmlspecialchars($courselist[$i]->crn);
                     $pagecontent .= \html_writer::end_tag('p');
 
-
                     $pagecontent .= \html_writer::end_div(''); // media-object
-
                     $pagecontent .= \html_writer::end_div(); // media-body
 
                     $pagecontent .= \html_writer::end_div(); // media

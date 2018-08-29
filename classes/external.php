@@ -76,6 +76,7 @@
                 'id'            => new external_value(PARAM_INT,        'Course Id'),
                 'crn'           => new external_value(PARAM_TEXT,       'Course Ref. Number'),
                 'shortname'     => new external_value(PARAM_TEXT,       'Course Shortname'),
+                'visible'       => new external_value(PARAM_BOOL,       'Course Visible Flag'),
                 'backupcap'     => new external_value(PARAM_BOOL,       'Backup Capability'),
                 'status'        => new external_value(PARAM_INT,        'Export Job Status'),
                 'url'           => new external_value(PARAM_URL,        'Course URL')
@@ -137,6 +138,7 @@
                         'id'        => $courserec->id,
                         'crn'       => $courserec->idnumber,
                         'shortname' => $courserec->shortname,
+                        'visible'   => $courserec->visible,
                         'backupcap' => has_capability('moodle/backup:backupcourse', \context_course::instance($courserec->id), $user->id, false),
                         'status'    => empty($queuerecs[$courserec->id]) ? 0 : $queuerecs[$courserec->id]->status,
                         'url'       => "{$CFG->wwwroot}/course/view.php?id={$courserec->id}"
