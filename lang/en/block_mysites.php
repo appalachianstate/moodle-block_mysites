@@ -61,7 +61,7 @@
     $string['status_-1']                    = 'Request failed!';
     $string['status_0']                     = '';
     $string['status_1']                     = 'Backup pending...';
-    $string['status_2']                     = 'Backup in proress...';
+    $string['status_2']                     = 'Backup in progress...';
     $string['status_3']                     = 'Backup failed!';
     $string['status_4']                     = 'Transfer pending...';
     $string['status_5']                     = 'Transfer in progress...';
