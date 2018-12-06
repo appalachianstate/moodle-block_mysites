@@ -161,16 +161,31 @@
         private function render_site_tabs(renderable $widget)
         {
 
+            $config = lib::get_pluginconfig();
+
             $tabnavs = '';
             $siteindex = 0;
 
             foreach ($widget->tablabels as $siteid => $tablabel) {
+                // If no courses or backups no reason to
+                // display this tab label
+                if (   count($widget->courselists[$siteid]) == 0
+                    && (   count($widget->backuplists[$siteid]) == 0
+                        || (    count($widget->backuplists[$siteid]) > 0
+                             && empty($config->showbackups)
+                           )
+                        )
+                   ) {
+                    continue;
+                }
+
                 $siteindex++;
                 $classattrib = 'nav-link' . ($siteindex == $widget->siteindex ? ' active' : '');
                 $tabnavs .= \html_writer::start_tag('li', array('class' => 'nav-item'))
                          .  \html_writer::link("#inst{$widget->blockinstanceid}-tab-{$siteindex}", "{$tablabel}",
                                 array('class' => $classattrib, 'role' => 'tab', 'data-toggle' => 'tab', 'data-site-index' => $siteindex))
                          .  \html_writer::end_tag('li');
+
             }
 
             return \html_writer::start_tag('ul', array('id' => "inst{$widget->blockinstanceid}-tablist", 'class' => 'nav nav-tabs m-b-1', 'role' => 'tablist'))
@@ -198,6 +213,18 @@
             // a paged list of courses
             $siteids = array_keys($widget->tablabels);
             foreach($siteids as $siteid) {
+                // If no courses or backups no reason to
+                // display this panel
+                if (   count($widget->courselists[$siteid]) == 0
+                    && (   count($widget->backuplists[$siteid]) == 0
+                        || (    count($widget->backuplists[$siteid]) > 0
+                             && empty($config->showbackups)
+                           )
+                        )
+                   ) {
+                    continue;
+                }
+
                 $siteindex++;
 
                 $panelcontent = \html_writer::start_div('tab-pane fade ' . ($siteindex == $widget->siteindex ? ' active in' : ''), array('id' => "inst{$widget->blockinstanceid}-tab-{$siteindex}"));
