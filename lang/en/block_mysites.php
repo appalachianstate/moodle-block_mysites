@@ -52,7 +52,11 @@
     $string['display_desc']                 = 'Display configuration values';
     $string['showbackups_lbl']              = 'Display backups';
     $string['showbackups_desc']             = 'Display list of user private backups from external sites.';
-
+    $string['cache_lbl']                    = 'Cache';
+    $string['cache_desc']                   = 'Cache configuration values';
+    $string['purge_freq_lbl']               = 'Cache purge frequency';
+    $string['purge_freq_desc']              = 'Frequency at which cached rows will be purged from mysites table';
+    
     $string['backup']                       = 'Request Backup';
     $string['reset']                        = 'Reset';
     $string['cancel']                       = 'Cancel Request';

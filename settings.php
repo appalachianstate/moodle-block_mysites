@@ -101,5 +101,26 @@
             "");
         $settings->add($adminSetting);
         unset($adminSetting);
-
+        
+        $field = "cache";
+        $adminSetting = new admin_setting_heading(
+            "{$pluginname}/{$field}",
+            get_string("{$field}_lbl",  $pluginname),
+            get_string("{$field}_desc", $pluginname));
+        $settings->add($adminSetting);
+        unset($adminSetting);
+        
+        $choices = array();
+        for ($i = 0; $i <= 60; $i+=5) {
+            $choices[$i] = $i;
+        }
+        $field = "purge_freq";
+        $adminSetting = new admin_setting_configselect(
+            "{$pluginname}/{$field}",
+            get_string("{$field}_lbl",  $pluginname),
+            get_string("{$field}_desc", $pluginname),
+            5,
+            $choices);
+            $settings->add($adminSetting);
+            unset($adminSetting);
     }

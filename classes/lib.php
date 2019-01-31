@@ -60,6 +60,8 @@
         const ACTION_CANCEL                 = 'cancel';
         const ACTION_RESET                  = 'reset';
         const ACTION_RESTORE                = 'restore';
+        
+        const PURGE_FREQ_DEFAULT = 5;
 
 
 
@@ -195,11 +197,14 @@
          *
          * @param int $minutesold Specify the age of cache entries to be cleared
          */
-        public static function clear_stale_caches($minutesold = 5)
+        public static function clear_stale_caches()
         {
             global $DB;
 
-
+          
+            $config = self::get_pluginconfig();
+            
+            $minutesold = (empty($config->purge_freq) ? self::PURGE_FREQ_DEFAULT : $config->purge_freq);
             $where = "timecreated < :timecreated";
             $params = array('timecreated' => time() - ($minutesold * MINSECS));
 
