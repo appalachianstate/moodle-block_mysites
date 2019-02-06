@@ -30,8 +30,8 @@
     $plugin             = new stdClass();
 
     $plugin->component  = 'block_mysites';
-    $plugin->version    = 2018052002;
+    $plugin->version    = 2018052003;
     $plugin->requires   = 2014051200;
-    $plugin->release    = "1.0.2 (Build 2018091600)";
+    $plugin->release    = "1.0.3 (Build 2019020600)";
     $plugin->cron       = 0;
     $plugin->maturity   = MATURITY_STABLE;
